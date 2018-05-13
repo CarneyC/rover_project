@@ -5,7 +5,7 @@
 /*
   If this doesn't compile,
   Go to Sketch -> Include Library -> Add .ZIP Library
-  And select the libraries folder in the root folder of this sketch
+  And select the rover_libs folder in the root folder of this sketch
   */
 #include <SoftwareSerial.h>
 #include <Sonar.h>
