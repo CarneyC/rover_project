@@ -16,10 +16,10 @@ class MazeSolver {
     void solveUnknownMaze();
     void updateDistance();
     void keepInBound();
+    int degreeToDelay(int degree);
   private:
     // functions
     void _nextStage();
-    int _degreeToDelay(int degree);
     // variables
     Rover *_rover;
     SonarBundle *_sonars;

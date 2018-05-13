@@ -30,10 +30,10 @@ void MazeSolver::solveUnknownMaze() {
       _rover->forward();
     } else if (!rightWall) {
       _rover->right();
-      delay(_degreeToDelay(90));
+      delay(degreeToDelay(90));
     } else {
       _rover->left();
-      delay(_degreeToDelay(180));
+      delay(degreeToDelay(180));
     }
   }
   else {
@@ -69,7 +69,7 @@ void MazeSolver::solveKnownMaze() {
     else if (!rightWall) {
       _nextStage();
       _rover->right();
-      delay(_degreeToDelay(90));
+      delay(degreeToDelay(90));
     }
 
     // Account for unexpected situation
@@ -97,7 +97,7 @@ void MazeSolver::solveKnownMaze() {
     } else {
       _nextStage();
       _rover->right();
-      delay(_degreeToDelay(90));
+      delay(degreeToDelay(90));
     }
   }
 
@@ -109,7 +109,7 @@ void MazeSolver::solveKnownMaze() {
     } else {
       _nextStage();
       _rover->left();
-      delay(_degreeToDelay(90));
+      delay(degreeToDelay(90));
     }
   }
 
@@ -121,7 +121,7 @@ void MazeSolver::solveKnownMaze() {
       } else {
         _nextStage();
         _rover->left();
-        delay(_degreeToDelay(90));
+        delay(degreeToDelay(90));
       }
   }
 
@@ -133,7 +133,7 @@ void MazeSolver::solveKnownMaze() {
       } else {
         _nextStage();
         _rover->right();
-        delay(_degreeToDelay(90));
+        delay(degreeToDelay(90));
       }
   }
 
@@ -146,7 +146,7 @@ void MazeSolver::solveKnownMaze() {
     else if (rightWall) {
       _nextStage();
       _rover->right();
-      delay(_degreeToDelay(90));
+      delay(degreeToDelay(90));
     }
   }
 
@@ -168,16 +168,16 @@ void MazeSolver::updateDistance() {
   _rightDistance = _sonars->right();
 }
 
+// convert degree angle to rotation time
+int MazeSolver::degreeToDelay(int degree) {
+  return degree * 20;
+}
+
 void MazeSolver::_nextStage() {
   _stage++;
   if (_debug) {
     Serial.print("Proceeding to Stage ");
     Serial.println(_stage);
   }
-}
-
-// convert degree angle to rotation time
-int MazeSolver::_degreeToDelay(int degree) {
-  return degree * (1120/90);
 }
 

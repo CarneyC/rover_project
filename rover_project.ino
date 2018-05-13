@@ -21,8 +21,8 @@
 Sonar frontSonar(8, 12);
 Sonar leftSonar(11, 13);
 Sonar rightSonar(10, 9);
-// Wrapper with serial output
-SonarBundle sonars(&frontSonar, &leftSonar, &rightSonar, true);
+// Wrapper with serial output (last argument defined if distance will be printed)
+SonarBundle sonars(&frontSonar, &leftSonar, &rightSonar, false);
 
 /*
   Motors (forward, reverse)
@@ -48,14 +48,13 @@ void setup() {
   Serial.begin(9600);
 }
 
-Action action;
-void loop() {
-  maze.updateDistance();
-  action = bluetooth.readAction();
+void loop() {  
+  Action action = bluetooth.readAction();
   rover.setAction(action);
-
+  
+  maze.updateDistance();  
   if (bluetooth.disabled()) {
-    maze.solveKnownMaze();
+    maze.solveUnknownMaze();
     // This will be togglable by bluetooth eventually
     // maze.solveUnknownMaze();
   }

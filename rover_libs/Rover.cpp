@@ -23,7 +23,7 @@ void Rover::reverse() {
   setAction(Action::Reverse);
 }
 void Rover::left() {
-  setAction(Action::Reverse);
+  setAction(Action::Left);
 }
 void Rover::right() {
   setAction(Action::Right);
