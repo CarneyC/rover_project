@@ -54,7 +54,7 @@ void loop() {
   
   maze.updateDistance();  
   if (bluetooth.disabled()) {
-    maze.solveUnknownMaze();
+    maze.solveKnownMaze();
     // This will be togglable by bluetooth eventually
     // maze.solveUnknownMaze();
   }
