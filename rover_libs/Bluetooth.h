@@ -12,7 +12,7 @@
 
 class Bluetooth {
   public:
-    Bluetooth(SoftwareSerial *serial, bool enabled = true, bool debug = true);
+    Bluetooth(SoftwareSerial *serial, bool enabled = false, bool debug = true);
     Action readAction();
     int read();
     bool enabled();

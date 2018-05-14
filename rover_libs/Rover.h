@@ -32,6 +32,7 @@ class Rover {
     Motor *_rightMotor;
     Action _lastAction;
     bool _debug;
+    uint32_t _begin;
 };
 
 #endif

@@ -63,7 +63,15 @@ bool Rover::setAction(Action action) {
       direction = "Stopping...";
       break;
   }
-  if (_debug && direction) Serial.println(direction);
+  if (_debug) {
+    uint32_t end = millis();
+    if (_begin) {
+//      Serial.print("Last action elapsed time (ms): ");
+//      Serial.println(end - _begin);
+    }
+    _begin = end;
+    if (direction) Serial.println(direction);
+  }
   _lastAction = action;
   return true;
 }

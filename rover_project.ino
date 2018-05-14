@@ -36,23 +36,25 @@ Rover rover(&leftMotor, &rightMotor);
   Bluetooth (RX, TX)
   */
 SoftwareSerial btSerial(4, 5);
-Bluetooth bluetooth(&btSerial);
+Bluetooth bluetooth(&btSerial, true);
 
 /*
   Maze Solver
   */
-MazeSolver maze(&rover, &sonars);
+MazeSolver maze(&rover, &sonars, 4);
 
 void setup() {
   // starts serial communication, for debugging in rover / bluetooth
   Serial.begin(9600);
 }
 
-void loop() {  
-  Action action = bluetooth.readAction();
-  rover.setAction(action);
+void loop() {
+  maze.updateDistance();
   
-  maze.updateDistance();  
+  Action action = bluetooth.readAction();
+  if (action == Action::Change) maze.reset();
+  else rover.setAction(action);
+  
   if (bluetooth.disabled()) {
     maze.solveKnownMaze();
     // This will be togglable by bluetooth eventually
