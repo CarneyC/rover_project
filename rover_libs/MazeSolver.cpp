@@ -168,7 +168,7 @@ void MazeSolver::solveKnownMaze() {
 
 // Stop Rover if wall is too close
 void MazeSolver::keepInBound() {
-  if (_rover->lastAction() == Action::Forward && _frontDistance <= _frontThreshold) {
+  if (_rover->lastAction() == Action::Forward && _frontDistance <= _frontThreshold * 1.5) {
     _rover->stop();
   }
 }

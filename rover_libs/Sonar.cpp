@@ -25,16 +25,19 @@ double Sonar::read() {
 }
 
 double Sonar::readDistance() {
-  float duration;
-  long min = _max;
+  long duration;
+  long durations[_sample];
+  int sampleCount = 0;
   for (int i = 0; i < _sample; i++) {
     duration = readDuration();
-    if (duration >= _max || isnan(duration)) {
-      return convert(_max);
-    }
-    if (duration < min) min = duration;
+        durations[sampleCount++] = duration;
+        if (duration >= _max || isnan(duration)) {
+          return convert(_max);
+        }
   }
-  return convert(min);
+  qsort(durations, sampleCount + 1, sizeof(double), _cmp);
+  long median = durations[sampleCount / 2];
+  return convert(median);
 }
 
 /*
@@ -63,4 +66,11 @@ long Sonar::convert(double distance) {
 
 double Sonar::convert(long duration) {
   return duration * 0.017;
+}
+
+int _cmp(const void *cmp1, const void *cmp2) {
+  // Need to cast the void * to int *
+  int a = *((int *)cmp1);
+  int b = *((int *)cmp2);
+  return a - b;
 }

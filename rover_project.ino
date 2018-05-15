@@ -22,7 +22,7 @@ Sonar frontSonar(8, 12);
 Sonar leftSonar(11, 13);
 Sonar rightSonar(10, 9);
 // Wrapper with serial output (last argument defined if distance will be printed)
-SonarBundle sonars(&frontSonar, &leftSonar, &rightSonar, false);
+SonarBundle sonars(&frontSonar, &leftSonar, &rightSonar, true);
 
 /*
   Motors (forward, reverse)
@@ -36,12 +36,12 @@ Rover rover(&leftMotor, &rightMotor);
   Bluetooth (RX, TX)
   */
 SoftwareSerial btSerial(4, 5);
-Bluetooth bluetooth(&btSerial, true);
+Bluetooth bluetooth(&btSerial, false);
 
 /*
   Maze Solver
   */
-MazeSolver maze(&rover, &sonars, 4);
+MazeSolver maze(&rover, &sonars, 4.8);
 
 void setup() {
   // starts serial communication, for debugging in rover / bluetooth
@@ -60,7 +60,6 @@ void loop() {
     // This will be togglable by bluetooth eventually
     // maze.solveUnknownMaze();
   }
-
   maze.keepInBound();
 }
 
