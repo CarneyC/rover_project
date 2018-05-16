@@ -9,7 +9,7 @@
 
 class Sonar {
   public:
-    Sonar(int trigPin, int echoPin, int sample = 3);
+    Sonar(int trigPin, int echoPin, int sample = 1);
     double read();
     double readDistance();
     long readDuration();

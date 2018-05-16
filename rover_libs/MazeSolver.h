@@ -11,9 +11,10 @@
 
 class MazeSolver {
   public:
-    MazeSolver(Rover *rover, SonarBundle *sonars, double threshold = 10.0, bool debug = true);
+    MazeSolver(Rover *rover, SonarBundle *sonars, double threshold = 10.0, double _angleModifier = 4.4, bool debug = true);
     void solveKnownMaze();    
-    void solveUnknownMaze();
+    void followLeftWall();
+    void followRightWall();
     void updateDistance();
     void keepInBound();
     int degreeToDelay(int degree);
@@ -28,6 +29,7 @@ class MazeSolver {
     SonarBundle *_sonars;
     double _frontThreshold;
     double _sideThreshold;
+    double _angleModifier;
     bool _debug;
     int _stage;
     double _frontDistance;

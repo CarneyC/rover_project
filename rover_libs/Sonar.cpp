@@ -25,16 +25,17 @@ double Sonar::read() {
 }
 
 double Sonar::readDistance() {
-  float duration;
+  long duration;
   long min = _max;
+  long total = 0;
   for (int i = 0; i < _sample; i++) {
     duration = readDuration();
     if (duration >= _max || isnan(duration)) {
       return convert(_max);
     }
-    if (duration < min) min = duration;
+    total += duration;
   }
-  return convert(min);
+  return convert(long(total/_sample));
 }
 
 /*

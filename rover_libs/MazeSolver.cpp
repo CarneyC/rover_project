@@ -8,27 +8,35 @@
 #include "Action.h"
 #include "SonarBundle.h"
 
-MazeSolver::MazeSolver(Rover *rover, SonarBundle *sonars, double threshold, bool debug) {
+MazeSolver::MazeSolver(Rover *rover, SonarBundle *sonars, double threshold, double angleModifier, bool debug) {
   _rover = rover;
   _sonars = sonars;
   _frontThreshold = threshold;
   _sideThreshold = threshold * 3.5;
   _debug = debug;
   _stage = 0;
+  _angleModifier = angleModifier;
 }
 
 /*
   Follow Left Wall
   Fairly rudimentary at this stage, require testing and improvements.
   */
-void MazeSolver::solveUnknownMaze() {
+void MazeSolver::followLeftWall() {
   bool frontWall = _frontDistance < _frontThreshold;
   bool leftWall = _leftDistance < _sideThreshold;
   bool rightWall = _rightDistance < _sideThreshold;
 
   if (leftWall) {
     if (!frontWall) {
-      _forward();
+        if (_leftDistance > _frontThreshold) {
+          _rover->left();
+        } else {
+          _rover->right();
+        }
+        delayMicroseconds(100);
+        _rover->forward();
+        delayMicroseconds(1000);
     } else if (!rightWall) {
       _rover->right();
       delay(degreeToDelay(90));
@@ -38,8 +46,40 @@ void MazeSolver::solveUnknownMaze() {
     }
   }
   else {
+    _rover->forward();
+    delay(200);
     _rover->left();
-    _forward();
+    delay(degreeToDelay(90));
+  }
+}
+void MazeSolver::followRightWall() {
+  bool frontWall = _frontDistance < _frontThreshold;
+  bool leftWall = _leftDistance < _sideThreshold;
+  bool rightWall = _rightDistance < _sideThreshold;
+
+  if (rightWall) {
+    if (!frontWall) {
+        if (_rightDistance > _frontThreshold) {
+          _rover->right();
+        } else {
+          _rover->left();
+        }
+        delayMicroseconds(100);
+        _rover->forward();
+        delayMicroseconds(1000);
+    } else if (!leftWall) {
+      _rover->left();
+      delay(degreeToDelay(90));
+    } else {
+      _rover->right();
+      delay(degreeToDelay(180));
+    }
+  }
+  else {
+    _rover->forward();
+    delay(200);
+    _rover->left();
+    delay(degreeToDelay(90));
   }
 }
 
@@ -68,9 +108,9 @@ void MazeSolver::solveKnownMaze() {
 
     // Front Wall AND Right Side opened
     else if (!rightWall) {
-      _nextStage();
       _rover->right();
       delay(degreeToDelay(90));
+      _nextStage();
     }
 
     // Account for unexpected situation
@@ -86,6 +126,8 @@ void MazeSolver::solveKnownMaze() {
     if (!rightWall) {
       _forward();
     } else {
+      _forward();
+      delay(1000);
       _nextStage();
     }
   }
@@ -97,7 +139,7 @@ void MazeSolver::solveKnownMaze() {
       _forward();
     } else {
       _rover->forward();
-      delay(800);
+      delay(200);
       _rover->right();
       delay(degreeToDelay(90));
       _nextStage();
@@ -120,7 +162,19 @@ void MazeSolver::solveKnownMaze() {
     if (rightWall) {
       _forward();
     } else {
+      _rover->left();
+      delay(degreeToDelay(45));
       _nextStage();
+    }
+  }
+
+  else if (_stage == 6) {
+    if (_frontDistance >= 67) {
+        _rover->forward();
+    } else {
+        _rover->right();
+        delay(degreeToDelay(45));
+        _nextStage();
     }
   }
 
@@ -182,7 +236,7 @@ void MazeSolver::updateDistance() {
 // convert degree angle to rotation time
 int MazeSolver::degreeToDelay(int degree) {
   // 1625 / 360
-  return degree * 6;
+  return degree * _angleModifier;
 }
 
 void MazeSolver::reset() {
@@ -203,9 +257,9 @@ void MazeSolver::_forward() {
   if (_leftDistance < threshold && _rightDistance < threshold) {
     int diff = _leftDistance - _rightDistance;
     _leftDistance > _rightDistance ? _rover->left() : _rover->right();
-    delayMicroseconds(100);
+    delayMicroseconds(80);
   }
   _rover->forward();
-  delay(1);
+  delayMicroseconds(1000);
 }
 
